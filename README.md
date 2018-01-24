@@ -21,7 +21,7 @@ both pixel loss*1+ feature loss*5|26.5565(+0.9437)|0.7726(+0.033)
 
 
 备注：  
- pixel loss是输出图像和目标图像的MSE，约为0.0025-0.0023之间，权重为1  
+pixel loss是输出图像和目标图像的MSE，约为0.0025-0.0023之间，权重为1  
 feature loss是输出图像和目标图像经过vgg第4层卷积输出的特征层的MSE，在0.0008-0.0006之间，权重为5
 
 
@@ -29,7 +29,8 @@ feature loss是输出图像和目标图像经过vgg第4层卷积输出的特征�
 ### 5.Analysis&Question
 #### 1.metrics:  
 &emsp;&emsp;换成feature loss后，PSNR、SSIM比原来低，这应该是正常的，参考论文中强调了这一点，因为SSIM和PSNR都是基于像素的衡量方式，并不能很好的衡量人类的视觉质量；从实验中也可以看出，虽然使用feature  loss后，PSNR、SSIM降低了，但是人眼却感觉到质量比原来好，主要是感觉到图像更清晰，但这是一种定性的判断，缺乏衡量手段，有待改进. 
-左图为用feature loss,右图为没有feature loss：  
+  
+  左图为用feature loss,右图为没有feature loss：  
 ![image](https://github.com/yydlmzyz/Feature-losses-for-image-deblocking/blob/master/images/compare.JPG)
 
 #### 2.model&net:  
