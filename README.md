@@ -12,12 +12,14 @@
 
 ### 4.Experiment Result
 训练模型 | PSNR|SSIM
----|---|--|
+---|---|---|
 input(Q10) | 25.6128|0.7395|
-pretrained model | 26.8396|0.7792
-只用feature loss*5 |25.7601|0.7304
-只用pixel loss*1|26.8711|0.7815
-都用1*pixel loss+5 *feature loss|26.5565|0.7726
+pretrained model | 26.8396(+1.23)|0.7792(+0.040)
+only feature loss*5 |25.7601(+0.15)|0.7304(-0.001)
+only pixel loss*1|26.8711(+1.26)|0.7815(+0.042)
+both pixel loss*1+ feature loss*5|26.5565(+0.9437)|0.7726(+0.033)
+
+
 备注：  
  pixel loss是输出图像和目标图像的MSE，约为0.0025-0.0023之间，权重为1  
 feature loss是输出图像和目标图像经过vgg第4层卷积输出的特征层的MSE，在0.0008-0.0006之间，权重为5
@@ -26,7 +28,7 @@ feature loss是输出图像和目标图像经过vgg第4层卷积输出的特征�
 
 ### 5.Analysis&Question
 #### 1.metrics:  
-&emsp;&emsp;换成feature loss后，PSNR、SSIM比原来低，这应该是正常的，参考论文中强调了这一点，因为SSIM和PSNR都是基于像素的衡量方式，并不能很好的衡量人类的视觉质量；从实验中也可以看出，虽然使用feature  loss后，PSNR、SSIM降低了，但是人眼却感觉到质量比原来好，主要是感觉到图像更清晰，比如下图：![image](http://note.youdao.com/favicon.ico)但这是一种定性的判断，缺乏衡量手段，有待改进
+&emsp;&emsp;换成feature loss后，PSNR、SSIM比原来低，这应该是正常的，参考论文中强调了这一点，因为SSIM和PSNR都是基于像素的衡量方式，并不能很好的衡量人类的视觉质量；从实验中也可以看出，虽然使用feature  loss后，PSNR、SSIM降低了，但是人眼却感觉到质量比原来好，主要是感觉到图像更清晰，比如下图：![image](https://github.com/yydlmzyz/Feature-losses-for-image-deblocking/blob/master/test/label/2018.jpg)但这是一种定性的判断，缺乏衡量手段，有待改进
 
 #### 2.model&net:  
 &emsp;&emsp;所用的特征提取模型vgg作为一个图像识别模型，它本身也和人眼的视觉功能更相关。即它所提取到的特征是高级特征表示。所以用vgg提取特征损失是合适的。  
