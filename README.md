@@ -46,7 +46,7 @@ feature loss是输出图像和目标图像经过vgg第4层卷积输出的特征�
 
 ![image](https://github.com/yydlmzyz/Feature-losses-for-image-deblocking/blob/master/images/noise.jpg)  
 
-以前并没有出现这种问题，但这次很严重，还没有解决，猜测其原因可能是由于训练不足、也有可能是与使用RGB格式有关，以前用YCbCr格式的时候没出现这种问题、也有可能是数据处理上有问题。有待解决。
+怀疑是数据处理上有问题，有待解决。
 
 #### 5.speed
 &emsp;&emsp;参考论文中提到用feature loss训练有加速收敛的作用，由于用了预训练好的模型，并没有观察到，有待测量
