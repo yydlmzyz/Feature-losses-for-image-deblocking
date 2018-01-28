@@ -42,11 +42,11 @@ feature loss是输出图像和目标图像经过vgg第4层卷积输出的特征�
 &emsp;&emsp;实验中混合两个loss时，权重为1：5，目的是使两种loss的值尽量相同，没有仔细分析其影响，有待改进。
 
 #### 4.new problem:  
-&emsp;&emsp;虽然输出图像的块效应有改善，但是却产生了噪声，尤其是在白色区域，更多更明显：
+&emsp;&emsp;虽然输出图像的块效应有改善，但是却产生了噪声，都是在白色区域：
 
 ![image](https://github.com/yydlmzyz/Feature-losses-for-image-deblocking/blob/master/images/noise.jpg)  
 
-怀疑是数据处理上有问题，有待解决。
+有待解决。
 
 #### 5.speed
 &emsp;&emsp;参考论文中提到用feature loss训练有加速收敛的作用，由于用了预训练好的模型，并没有观察到，有待测量
