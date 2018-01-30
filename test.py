@@ -1,5 +1,6 @@
 import os
-from PIL import Image
+#from PIL import Image
+import cv2
 import numpy
 import torch
 from torch.utils.data import Dataset, DataLoader
@@ -23,10 +24,14 @@ class ImageDataset(Dataset):
         label_names = sorted(os.listdir(self.label_dir))
 
         input_name = os.path.join(self.input_dir,input_names[idx])
-        input_image =Image.open(input_name)#Image get jpg
+        #input_image =Image.open(input_name)#Image get jpg
+        input_image=cv2.imread(input_name)
+        input_image = cv2.cvtColor(input_image, cv2.COLOR_BGR2RGB)
 
         label_name = os.path.join(self.label_dir,label_names[idx])
-        label_image =Image.open(label_name)
+        #label_image =Image.open(label_name)
+        label_image=cv2.imread(label_name)
+        label_image = cv2.cvtColor(label_image, cv2.COLOR_BGR2RGB)
 
         sample = {'input_image': input_image, 'label_image': label_image, 'name': input_names[idx]}
 
@@ -42,8 +47,10 @@ class mytransform(object):
         # swap color axis because
         # numpy image: H x W x C
         # torch image: C X H X W
-        input_image = numpy.asarray(input_image).transpose(2, 0, 1)/255.0
-        label_image = numpy.asarray(label_image).transpose(2, 0, 1)/255.0
+        #input_image = numpy.asarray(input_image).transpose(2, 0, 1)/255.0
+        #label_image = numpy.asarray(label_image).transpose(2, 0, 1)/255.0
+        input_image = input_image.transpose(2, 0, 1)/255.0
+        label_image = label_image.transpose(2, 0, 1)/255.0
 
         return {'input_image': torch.from_numpy(input_image).float(),
                 'label_image': torch.from_numpy(label_image).float(),
@@ -72,8 +79,10 @@ def save(output_image,name):
     else:
         img=255.0*output_data.clone().numpy()
     img = img.transpose(1, 2, 0).astype("uint8")
-    img = Image.fromarray(img)
-    img.save(os.path.join(Image_folder,'output','{}.jpg'.format(name[:-4])))
+    #img = Image.fromarray(img)
+    #img.save(os.path.join(Image_folder,'output','{}.jpg'.format(name[:-4])))
+    img = cv2.cvtColor(img, cv2.COLOR_RGB2BGR)
+    cv2.imwrite(os.path.join(Image_folder,'output','{}.jpg'.format(name[:-4])),img)
 
 
 def test():
@@ -92,13 +101,16 @@ def test():
         input_image,label_image=wrap_variable(input_image,label_image, use_gpu)
         #predict
         output_image = model(input_image)
+        #clamp in[0,1]
+        output_image=output_image.clamp(0.0, 1.0)
+
 
         #calculate psnr
         psnr1 =myutils.psnr(input_image, label_image)
         psnr2 =myutils.psnr(output_image, label_image)
         # ssim is calculated with the normalize (range [0, 1]) image
-        ssim1 = torch.sum((myutils.ssim(input_image, label_image, size_average=False)).data)/1#batch_size
-        ssim2 = torch.sum((myutils.ssim(output_image, label_image, size_average=False)).data)/1
+        ssim1 = torch.sum((myutils.ssim(input_image, label_image, size_average=False)).data)/1.0#batch_size
+        ssim2 = torch.sum((myutils.ssim(output_image, label_image, size_average=False)).data)/1.0
 
         avg_ssim1 += ssim1
         avg_psnr1 += psnr1
