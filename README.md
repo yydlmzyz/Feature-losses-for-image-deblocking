@@ -4,7 +4,7 @@
 &emsp;&emsp;为进一步提高去块效果，参考：[Perceptual Losses for Real-Time Style Transfer and Super-Resolution](https://arxiv.org/abs/1603.08155)的方法，训练一个CNN去块网络，但不仅以输出图像和目标图像的MSE构造损失函数，而通过一个预训练好的网络vgg16中提取输出图像和目标图像的高级特征，构造新的损失函数来训练网络。  
   
 ### 2.Model
-&emsp;&emsp;图像去块网络暂用[L8](https://arxiv.org/pdf/1605.00366.pdf)。特征提取网络用[vgg16](https://arxiv.org/abs/1409.1556)。参考论文中用来构造损失函数的特征层是其13层卷积层中的第2、4、7、10层卷积的激活输出。实验中暂只用了第4层卷积层的输出。  
+&emsp;&emsp;图像去块网络暂用[L8](https://arxiv.org/pdf/1605.00366.pdf)。特征提取网络用[vgg16](https://arxiv.org/abs/1409.1556)。参考论文中用来构造损失函数的特征层是其13层卷积层中的第4层卷积层的输出。  
 &emsp;&emsp;L8和vgg都经过预训练。
 ### 3.Train
 &emsp;&emsp;1.数据集：train[100800,3,42,42],validation约[15000,3,42,42]，test[200,3,481,321]。RGB格式，压缩率10  
@@ -42,7 +42,7 @@ feature loss是输出图像和目标图像经过vgg第4层卷积输出的特征�
 
 #### 3.loss weights:  
 &emsp;&emsp;在单独使用feature loss时，pixel loss并没有减小；在单独使用pixel loss式，feature loss也没有明显减小；共同使用时，两者都在减小。两个loss有关系但也有区别。  
-&emsp;&emsp;实验中混合两个loss时，权重为1：5，目的是使两种loss的值尽量相同，没有仔细分析其影响，有待改进。
+&emsp;&emsp;实验中混合两个loss时，权重为1：5，目的是使两种loss的值尽量相同。
 
 
 #### 5.speed
