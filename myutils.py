@@ -15,7 +15,7 @@ def normalize_batch(batch):
     std[:, 0, :, :] = 0.229
     std[:, 1, :, :] = 0.224
     std[:, 2, :, :] = 0.225
-    batch = torch.div(batch, 255.0)
+    batch = torch.div(batch, 1.0)#Attention
     batch -= Variable(mean)
     batch = batch / Variable(std)
     return batch
